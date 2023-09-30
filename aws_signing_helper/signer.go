@@ -120,12 +120,31 @@ var Debug bool = false
 // Find whether the current certificate matches the CertIdentifier
 func certMatches(certIdentifier CertIdentifier, cert x509.Certificate) bool {
 	if certIdentifier.Subject != "" && certIdentifier.Subject != cert.Subject.String() {
-		return false
+		// Todo: This is wrong. This is comparing the CN RDN to the entire subject.
+		// So clearly they are expecting the full subject, not just the CN.
+		log.Println("Does " + certIdentifier.Subject + " match " + cert.Subject.String())
+		// return false
 	}
 	if certIdentifier.Issuer != "" && certIdentifier.Issuer != cert.Issuer.String() {
-		return false
+		// Todo: Same problem here.
+		// Same here. They are expecting the full issuer, not just the issuer CN.
+		// But I'm having some more problems now:
+		// 1. My non-BS test cert issuer string (based on what I get from openssl -text or in the keychains UI)
+		// doesn't match what their code emits. I have changed it to match and now it matches.
+		// 2. But now that cert is not matching on serial number. Wtf are they doing with the matching there?
+		// 		- I tried updating it to what they report in read-certificate-data. But still no match.
+		// 2. I'm now just getting the error on the BS cert that is coming from multiple matching certs.
+		// Why is there more than one?
+		// I think if I solve that for the BS test then it will work.
+		log.Println("Does " + certIdentifier.Issuer + " match " + cert.Issuer.String())
+		// return false
 	}
 	if certIdentifier.SerialNumber != nil && certIdentifier.SerialNumber.Cmp(cert.SerialNumber) != 0 {
+		// Todo: I'm not sure what's going on here. This is an example of the result I'm getting:
+		// Does 322778885260270961742004754112396741819531710612 match 867551010781400878
+		log.Println(certIdentifier.SerialNumber)
+		log.Println(cert.SerialNumber)
+		log.Println("Does " + certIdentifier.SerialNumber.String() + " match " + cert.SerialNumber.String())
 		return false
 	}
 
