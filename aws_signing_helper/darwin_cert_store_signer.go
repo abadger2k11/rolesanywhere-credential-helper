@@ -134,6 +134,9 @@ func GetCertStoreSigner(certIdentifier CertIdentifier) (signer Signer, signingAl
 		return nil, "", err
 	}
 	if len(certContainers) == 0 {
+		log.Println(certIdentifier.Subject)
+		log.Println(certIdentifier.Issuer)
+		log.Println(certIdentifier.SerialNumber)
 		return nil, "", errors.New("no matching identities")
 	}
 	if len(certContainers) > 1 {

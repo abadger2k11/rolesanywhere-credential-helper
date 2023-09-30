@@ -9,7 +9,7 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "aws_signing_helper [command]",
 	Short: "The credential helper is a tool to retrieve temporary AWS credentials",
-	Long: `A tool that utilizes certificates and their associated private keys to 
+	Long: `(Custom build) A tool that utilizes certificates and their associated private keys to 
 sign requests to AWS IAM Roles Anywhere's CreateSession API and retrieve temporary 
 AWS security credentials. This tool exposes multiple commands to make credential 
 retrieval and rotation more convenient.`,
